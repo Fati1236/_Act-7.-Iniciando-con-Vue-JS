@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué  profe de EVN eres?</title>
+    <link rel="stylesheet" href="css/TEST.css">
+</head>
+<body>
+    <div id="test" class="contenedor">
+        <h1>¿Qué  profe de EVN eres?</h1>
+
+        <div v-if="!nombreValido">
+            <h2>Por favor, ingresa tu nombre:</h2>
+            <input v-model="nombre" placeholder="Tu nombre aquí" type="text" />
+            <button class="boton" @click="iniciarCuestionario">Comenzar</button>
+            <p v-if="error" class="error">{{ error }}</p>
+        </div>
+
+        <div v-if="nombreValido && preguntaActual < preguntas.length">
+            <h2>Hola, {{ nombre }}! Responde las preguntas:</h2>
+            <div :class="{'pregunta-error': errorSeleccion}">
+                <div class="pregunta">{{ preguntas[preguntaActual].texto }}</div>
+                <div class="opciones">
+                    <div 
+                        v-for="(opcion, index) in preguntas[preguntaActual].opciones" 
+                        :key="index" 
+                        class="opcion"
+                    >
+                        <input 
+                            type="radio" 
+                            :name="'pregunta' + preguntaActual" 
+                            :value="opcion" 
+                            v-model="respuestas[preguntaActual]"
+                        /> 
+                        {{ opcion }}
+                    </div>
+                </div>
+                <p v-if="errorSeleccion" class="error">Por favor, selecciona una respuesta.</p>
+                <button class="boton" @click="siguientePregunta">Siguiente</button>
+            </div>
+        </div>
+
+        <div v-if="preguntaActual >= preguntas.length" class="resultado">
+            <h2>Resultado final</h2>
+            <p>{{ nombre }}, eres un/a profe {{ resultado.tipo }}!</p>
+            <p><strong>Razón:</strong> {{ resultado.razon }}</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="js/TEST.JS"></script>
+</body>
+</html>
